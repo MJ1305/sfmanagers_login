@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FiLock, FiUnlock, FiEye, FiEyeOff } from 'react-icons/fi';
-import Chipimg from '../assets/images/chipimg2.jpg'
+import { FaWifi } from "react-icons/fa";
+import Chipimg from '../assets/images/chipimg3.jpg'
 import Footer from './shared/footer';
 
 const LoginCard = () => {
@@ -15,33 +16,33 @@ const LoginCard = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="w-[35rem] max-w-2xl">
       {/* Horizontal ATM Card */}
       <div className="bg-gradient-to-r from-blue-900 to-blue-700 rounded-xl shadow-2xl p-6 border-2 border-blue-400 border-opacity-30">
-        <div className="flex justify-around h-64">
-          {/*Section 1 - Chip & Branding */}
-          <div className="w-1/4 flex flex-col justify-between pr-4 border-r border-blue-500 border-opacity-30">
-            <div className="flex flex-col items-start">
-              <div className='w-1/3'>
-                <img src={Chipimg} alt="Chipimg" />
+        <div className='p-1'>
+          <h1 className='text-white text-[1.3rem] px-[1rem] font-bold flex justify-end'>SF MANAGERS</h1>          
+          <div className='flex items-center justify-between my-2'>
+            <img className='rounded-md my-3 w-12' src={Chipimg} alt="" />        
+            <div className='text-white flex justify-around w-[6rem] text-[1.5rem]'>              
+              <div className='rotate-85'>
+                <FaWifi/>
               </div>
-              <div className="text-white font-bold text-xl rotate-90 origin-left whitespace-nowrap mt-2">
-                SF MANAGERS
-              </div>
+              <p className=''>12234</p>
             </div>
-            <div className="text-blue-200 text-s">LOGIN CARD</div>
           </div>
-
+          <div className='border-blue-400 border rounded-md px-1 my-2'>
+            <h3 className='text-white font-mono text-[1.6rem]'>3759 876543 21001</h3>
+          </div>
           {/*Section 2 - Login Form */}
-          <div className="w-2/3 px-6 flex flex-col justify-center">
-            <div className="space-y-4">
+          <div className="flex flex-col justify-center items-end">
+            <div className="w-90">
               {/* Email Field */}
               <div className="relative">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent border-b border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none"
+                  className="w-full bg-transparent border-b rounded-md border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none"
                   placeholder="ENTER EMAIL"
                 />
                 <div className="absolute right-0 top-2 text-blue-300">
@@ -58,7 +59,7 @@ const LoginCard = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent border-b border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none pr-8"
+                  className="w-full bg-transparent border-b rounded-md border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none pr-8"
                   placeholder="ENTER PIN"
                 />
                 <div className="absolute right-0 top-2 flex space-x-1">
@@ -74,11 +75,14 @@ const LoginCard = () => {
                     )}
                   </button>                  
                 </div>
-              </div>
-              <button className="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg transition">
-                AUTHENTICATE
-              </button>
+              </div>              
             </div>
+            <div className=' w-full mt-3 flex justify-between items-center'>                
+                <h1 className='text-white text-[1rem] font-serif'>SFORGER GROUP</h1>                
+                <button className="w-35 border  bg-blue-600 hover:bg-blue-500 text-white py-1 rounded-lg transition">
+                  AUTHENTICATE
+                </button>
+              </div>
           </div>
         </div>
 

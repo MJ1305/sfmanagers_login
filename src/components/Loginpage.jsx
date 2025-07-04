@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FiLock, FiUnlock, FiEye, FiEyeOff } from 'react-icons/fi';
 import { FaWifi } from "react-icons/fa";
-import Chipimg from '../assets/images/chipimg3.jpg'
+import Chipimg from '../assets/images/chipimg3.jpg';
 import Footer from './shared/footer';
 
 const LoginCard = () => {
@@ -9,6 +9,50 @@ const LoginCard = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLocked, setIsLocked] = useState(true);
+  const [isFrozen, setIsFrozen] = useState(false);
+  const cardRef = useRef(null);
+
+  // Tilt effect
+  useEffect(() => {
+    const card = cardRef.current;
+
+    const handleMouseMove = (e) => {
+      if (!isFrozen && card) {
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+        card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (card) {
+        card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+      }
+    };
+
+    const freezeCard = () => setIsFrozen(true);
+    const unfreezeCard = () => setIsFrozen(false);
+
+    // Add event listeners
+    card?.addEventListener('mousemove', handleMouseMove);
+    card?.addEventListener('mouseleave', handleMouseLeave);
+    
+    // Freeze during input focus
+    const inputs = card?.querySelectorAll('input');
+    inputs?.forEach(input => {
+      input.addEventListener('focus', freezeCard);
+      input.addEventListener('blur', unfreezeCard);
+    });
+
+    return () => {
+      card?.removeEventListener('mousemove', handleMouseMove);
+      card?.removeEventListener('mouseleave', handleMouseLeave);
+      inputs?.forEach(input => {
+        input.removeEventListener('focus', freezeCard);
+        input.removeEventListener('blur', unfreezeCard);
+      });
+    };
+  }, [isFrozen]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -16,9 +60,16 @@ const LoginCard = () => {
   };
 
   return (
-    <div className="w-[35rem] max-w-2xl">
-      {/* Horizontal ATM Card */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-700 rounded-xl shadow-2xl p-6 border-2 border-blue-400 border-opacity-30">
+    <div className="w-[35rem] max-w-2xl perspective-1000">
+      {/* Horizontal ATM Card with 3D effects */}
+      <div 
+        ref={cardRef}
+        className="bg-gradient-to-r from-blue-900 to-blue-700 rounded-xl shadow-2xl p-6 border-2 border-blue-400 border-opacity-30 transition-transform duration-300 ease-out transform-style-preserve-3d"
+        style={{
+          transform: 'rotateY(0deg) rotateX(0deg)',
+          willChange: 'transform'
+        }}
+      >
         <div className='p-1'>
           <h1 className='text-white text-[1.3rem] px-[1rem] font-bold flex justify-end'>SF MANAGERS</h1>          
           <div className='flex items-center justify-between my-2'>
@@ -33,7 +84,8 @@ const LoginCard = () => {
           <div className='border-blue-400 border rounded-md px-1 my-2'>
             <h3 className='text-white font-mono text-[1.6rem]'>3759 876543 21001</h3>
           </div>
-          {/*Section 2 - Login Form */}
+          
+          {/* Login Form */}
           <div className="flex flex-col justify-center items-end">
             <div className="w-90">
               {/* Email Field */}
@@ -42,7 +94,7 @@ const LoginCard = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent border-b rounded-md border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none"
+                  className="w-full bg-transparent border-b rounded-md border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none pl-2 pr-8"
                   placeholder="ENTER EMAIL"
                 />
                 <div className="absolute right-0 top-2 text-blue-300">
@@ -53,13 +105,13 @@ const LoginCard = () => {
                 </div>
               </div>
 
-              {/* Password Field with Toggle */}
+              {/* Password Field */}
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent border-b rounded-md border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none pr-8"
+                  className="w-full bg-transparent border-b rounded-md border-blue-400 py-2 text-white placeholder-blue-300 focus:outline-none pl-2 pr-8"
                   placeholder="ENTER PIN"
                 />
                 <div className="absolute right-0 top-2 flex space-x-1">
@@ -77,16 +129,14 @@ const LoginCard = () => {
                 </div>
               </div>              
             </div>
-            <div className=' w-full mt-3 flex justify-between items-center'>                
-                <h1 className='text-white text-[1rem] font-serif'>SFORGER GROUP</h1>                
-                <button className="w-35 border  bg-blue-600 hover:bg-blue-500 text-white py-1 rounded-lg transition">
-                  AUTHENTICATE
-                </button>
-              </div>
+            <div className='w-full mt-3 flex justify-between items-center'>                
+              <h1 className='text-white text-[1rem] font-serif'>SFORGER GROUP</h1>                
+              <button className="w-35 border bg-blue-600 hover:bg-blue-500 text-white py-1 rounded-lg transition">
+                AUTHENTICATE
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Card Footer */}
         <Footer/>
       </div>
     </div>
